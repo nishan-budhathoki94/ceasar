@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "56191059718",
+    "firebase_url": "https://ceasar-ce30d.firebaseio.com",
+    "project_id": "ceasar-ce30d",
+    "storage_bucket": "ceasar-ce30d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56191059718:android:9c70c9421a6d10fe",
+        "android_client_info": {
+          "package_name": "com.mitfinalproject.ceasar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56191059718-b78agid7uq2v97vhhk2fe1118ihb0gg9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mitfinalproject.ceasar",
+            "certificate_hash": "6ed4814892420650c8feaacc3cf1388573770396"
+          }
+        },
+        {
+          "client_id": "56191059718-818rssd7qtg4sr65fjs9e7pagkbeimae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY5ouweav0eewMcEfiKHKGVXO2_XL8wGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "56191059718-818rssd7qtg4sr65fjs9e7pagkbeimae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
