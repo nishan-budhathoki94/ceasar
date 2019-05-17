@@ -3,8 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mitfinalproject.ceasar.AdminPanel">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/action_addMenuItem"
+        android:orderInCategory="101"
+        android:title="Add Menu Items"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/createEmployeeAccount"
+        android:orderInCategory="102"
+        android:title="Create Employee Account" />
+    <item
+        android:id="@+id/viewMenuItems"
+        android:orderInCategory="103"
+        android:title="Menu Items List" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="104"
+        android:title="Log Out" />
+
+
 </menu>
