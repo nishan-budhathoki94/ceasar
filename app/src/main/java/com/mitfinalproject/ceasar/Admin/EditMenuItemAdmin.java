@@ -1,10 +1,9 @@
-package com.mitfinalproject.ceasar;
+package com.mitfinalproject.ceasar.Admin;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,11 +19,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mitfinalproject.ceasar.Login;
+import com.mitfinalproject.ceasar.R;
+import com.mitfinalproject.ceasar.SignUp;
+import com.mitfinalproject.ceasar.VolleySingleton;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AdminPanel extends AppCompatActivity {
+public class EditMenuItem extends AppCompatActivity {
 
     private Spinner spinnerCategory,spinnerSize,spinnerAvailability;
     TextInputLayout textInputLayoutName,textInputLayoutDescription,textInputLayoutPrice;
@@ -33,7 +36,7 @@ public class AdminPanel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_panel);
+        setContentView(R.layout.activity_add_menu_items);
         server_url = "http://everestelectricals.com.au/ceasar/add_item.php";
         textInputLayoutName = findViewById(R.id.textInputLayoutMenuName);
         textInputLayoutDescription = findViewById(R.id.textInputLayoutMenuDescription);
@@ -41,17 +44,17 @@ public class AdminPanel extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarMenuItem);
         //setting up each spinner to its relative arrays
         spinnerCategory =  findViewById(R.id.spinnerCategory);
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(AdminPanel.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.categories));
+        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(EditMenuItemAdmin.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.categories));
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapterCategory);
 
         spinnerSize =  findViewById(R.id.spinnerSize);
-        ArrayAdapter<String> adapterSize = new ArrayAdapter<>(AdminPanel.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.size));
+        ArrayAdapter<String> adapterSize = new ArrayAdapter<>(EditMenuItemAdmin.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.size));
         adapterSize.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSize.setAdapter(adapterSize);
 
         spinnerAvailability =  findViewById(R.id.spinnerAvailability);
-        ArrayAdapter<String> adapterAvailability = new ArrayAdapter<>(AdminPanel.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.availability));
+        ArrayAdapter<String> adapterAvailability = new ArrayAdapter<>(EditMenuItemAdmin.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.availability));
         adapterAvailability.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAvailability.setAdapter(adapterAvailability);
     }
@@ -103,11 +106,8 @@ public class AdminPanel extends AppCompatActivity {
                 }
             };
 
-            VolleySingleton.getInstance(AdminPanel.this).addToRequestQueue(request);
+            VolleySingleton.getInstance(EditMenuItemAdmin.this).addToRequestQueue(request);
         }
-
-
-
     }
 
     @Override
@@ -123,15 +123,22 @@ public class AdminPanel extends AppCompatActivity {
             case R.id.action_logout:
                 FirebaseAuth.getInstance().signOut();
                 finish();
-                startActivity(new Intent(this,Login.class));
+                startActivity(new Intent(this, Login.class));
                 break;
-
             case R.id.viewMenuItems:
                 finish();
-                startActivity(new Intent(this,ItemList.class));
+                startActivity(new Intent(this, ItemListAdmin.class));
                 break;
             case R.id.action_addMenuItem:
+                Toast.makeText(getApplicationContext(), "You are already in Add Menu Items", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.createEmployeeAccount:
+                Intent createEmployee = new Intent(EditMenuItemAdmin.this, SignUp.class);
+                createEmployee.putExtra("type","employee");
+                finish();
+                startActivity(createEmployee);
+                break;
+
         }
         return true;
     }

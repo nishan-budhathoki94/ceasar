@@ -1,6 +1,7 @@
 package com.mitfinalproject.ceasar;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +11,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -27,11 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ItemList extends AppCompatActivity {
+public class ItemListAdmin extends AppCompatActivity {
     private Spinner spinnerCategory;
     private String name,category,desc,price,availability,size;
     private int itemID;
@@ -39,12 +37,15 @@ public class ItemList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
+        setContentView(R.layout.activity_item_list_admin);
+        if (Build.VERSION.SDK_INT >= 21){
+
+        }
         fetchItemList();
         //setupList(itemListEntree);
         //assigning spinner to its designated array
         spinnerCategory =  findViewById(R.id.spinnerItemListCategory);
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(ItemList.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.categories));
+        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(ItemListAdmin.this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.categories));
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapterCategory);
 
@@ -68,6 +69,8 @@ public class ItemList extends AppCompatActivity {
                     case 4:
                         setupList(itemListDessert);
                         break;
+                    default:
+                        setupList(itemListEntree);
                 }
             }
 
@@ -82,6 +85,7 @@ public class ItemList extends AppCompatActivity {
     //setup recycler view according to the list received
     public void setupList(List<ItemData> itemList){
         RecyclerView menuListRecycler = findViewById(R.id.recyclerMenuItems);
+        menuListRecycler.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         menuListRecycler.setLayoutManager(layoutManager);
@@ -107,7 +111,6 @@ public class ItemList extends AppCompatActivity {
                             JSONArray jsonArray = response.getJSONArray("data");
                             for(int i=0;i<jsonArray.length();i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Log.d("hiphiphurray", "onResponse: "+jsonObject);
                                 name = jsonObject.getString("name").trim();
                                 category = jsonObject.getString("category").trim();
                                 desc = jsonObject.getString("desc").trim();
@@ -117,19 +120,19 @@ public class ItemList extends AppCompatActivity {
                                 availability = jsonObject.getString("availability").trim();
 
                                 //populate the fetched data based on the category
-                                if(category.equals("Entree")){
+                                if(category.equals("Entree") && !availability.equals("No")){
                                     itemListEntree.add(new ItemData(name,category,desc,size,price,availability,itemID));
                                 }
-                                else if (category.equals("Salads")) {
+                                else if (category.equals("Salads") && !availability.equals("No")) {
                                     itemListSalad.add(new ItemData(name,category,desc,size,price,availability,itemID));
                                 }
-                                else if (category.equals("Desserts")) {
+                                else if (category.equals("Desserts") && !availability.equals("No")) {
                                     itemListDessert.add(new ItemData(name,category,desc,size,price,availability,itemID));
                                 }
-                                else if (category.equals("Drinks")) {
+                                else if (category.equals("Drinks") && !availability.equals("No")) {
                                     itemListDrink.add(new ItemData(name,category,desc,size,price,availability,itemID));
                                 }
-                                else if (category.equals("Pizza")) {
+                                else if (category.equals("Pizza") && !availability.equals("No")) {
                                     itemListPizza.add(new ItemData(name, category, desc, size, price, availability, itemID));
                                 }
                             }
@@ -149,7 +152,7 @@ public class ItemList extends AppCompatActivity {
 
         };
 
-        VolleySingleton.getInstance(ItemList.this).addToRequestQueue(request);
+        VolleySingleton.getInstance(ItemListAdmin.this).addToRequestQueue(request);
     }
 
     @Override
@@ -170,9 +173,14 @@ public class ItemList extends AppCompatActivity {
 
             case R.id.action_addMenuItem:
                 finish();
-                startActivity(new Intent(this,AdminPanel.class));
+                startActivity(new Intent(this, AddMenuItemAdmin.class));
                 break;
             case R.id.viewMenuItems:
+                Toast.makeText(getApplicationContext(), "You are already viewing the menu items", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.createEmployeeAccount:
+                finish();
+                startActivity(new Intent(ItemListAdmin.this,SignUpEmployee.class));
                 break;
         }
         return true;
