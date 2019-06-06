@@ -1,11 +1,11 @@
-package com.mitfinalproject.ceasar.Fragments_Customer;
+package com.mitfinalproject.ceasar.Fragments_Admin;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.mitfinalproject.ceasar.Customer.ItemListAdapterCustomer;
+import com.mitfinalproject.ceasar.Admin.ItemListAdapterAdmin;
 import com.mitfinalproject.ceasar.ItemData;
 import com.mitfinalproject.ceasar.R;
 import com.mitfinalproject.ceasar.VolleySingleton;
@@ -32,7 +32,7 @@ public class FragmentSalad extends Fragment {
     private RecyclerView recyclerViewEntree;
     private List<ItemData> listSalad;
     private ItemData singleItem;
-    ItemListAdapterCustomer itemListAdapter;
+    ItemListAdapterAdmin itemListAdapter;
     private View v;
 
     public FragmentSalad() {
@@ -46,7 +46,7 @@ public class FragmentSalad extends Fragment {
         recyclerViewEntree = v.findViewById(R.id.recyclerViewSalad);
         Log.d("FragmentEntree", "inside oncreate view: ");
         recyclerViewEntree.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        itemListAdapter = new ItemListAdapterCustomer(listSalad,this.getActivity());
+        itemListAdapter = new ItemListAdapterAdmin(listSalad,this.getActivity());
         recyclerViewEntree.setAdapter(itemListAdapter);
         return v;
     }

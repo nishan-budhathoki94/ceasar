@@ -1,11 +1,11 @@
 package com.mitfinalproject.ceasar.Fragments_Customer;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mitfinalproject.ceasar.Customer.ItemListAdapterCustomer;
+import com.mitfinalproject.ceasar.Customer.OnAddToCartListener;
 import com.mitfinalproject.ceasar.ItemData;
 import com.mitfinalproject.ceasar.R;
 import com.mitfinalproject.ceasar.VolleySingleton;
@@ -27,26 +28,26 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentDrink extends Fragment {
-
+public class FragmentDessert extends Fragment {
     private RecyclerView recyclerViewEntree;
-    private List<ItemData> listDrink;
+    private List<ItemData> listDessert;
     private ItemData singleItem;
-    ItemListAdapterCustomer itemListAdapter;
+    private ItemListAdapterCustomer itemListAdapter;
+    private OnAddToCartListener mOnAddToCartListener;
     private View v;
 
-    public FragmentDrink() {
+    public FragmentDessert() {
     }
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_drinks,container,false);
-        recyclerViewEntree = v.findViewById(R.id.recyclerViewDrinks);
+        v = inflater.inflate(R.layout.fragment_dessert,container,false);
+        recyclerViewEntree = v.findViewById(R.id.recyclerViewDessert);
         Log.d("FragmentEntree", "inside oncreate view: ");
         recyclerViewEntree.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        itemListAdapter = new ItemListAdapterCustomer(listDrink,this.getActivity());
+        itemListAdapter = new ItemListAdapterCustomer(listDessert,this.getActivity());
         recyclerViewEntree.setAdapter(itemListAdapter);
         return v;
     }
@@ -55,13 +56,14 @@ public class FragmentDrink extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fetchItemList();
+        Log.d("FragmentEntree", "list fetched: ");
 
     }
 
     //fetch all the data for menu items from database
     public void fetchItemList(){
         String server_url = "http://everestelectricals.com.au/ceasar/get_menu_items.php";
-        listDrink = new ArrayList<>();
+        listDessert = new ArrayList<>();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, server_url,null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -80,8 +82,8 @@ public class FragmentDrink extends Fragment {
                                 singleItem.setAvailability(jsonObject.getString("availability").trim());
 
                                 //populate the fetched data based on the category
-                                if(singleItem.getCategory().equals("Drinks") && !singleItem.getAvailability().equals("No")){
-                                    listDrink.add(singleItem);
+                                if(singleItem.getCategory().equals("Desserts") && !singleItem.getAvailability().equals("No")){
+                                    listDessert.add(singleItem);
                                 }
 
                             }

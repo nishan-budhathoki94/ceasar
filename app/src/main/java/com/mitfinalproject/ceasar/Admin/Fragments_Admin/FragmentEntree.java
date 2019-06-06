@@ -1,11 +1,11 @@
-package com.mitfinalproject.ceasar.Fragments;
+package com.mitfinalproject.ceasar.Fragments_Admin;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.mitfinalproject.ceasar.Customer.ItemListAdapterCustomer;
+import com.mitfinalproject.ceasar.Admin.ItemListAdapterAdmin;
 import com.mitfinalproject.ceasar.ItemData;
 import com.mitfinalproject.ceasar.R;
 import com.mitfinalproject.ceasar.VolleySingleton;
@@ -27,25 +27,26 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentDessert extends Fragment {
+public class FragmentEntree extends Fragment {
+
     private RecyclerView recyclerViewEntree;
-    private List<ItemData> listDessert;
+    private List<ItemData> listEntree;
     private ItemData singleItem;
-    ItemListAdapterCustomer itemListAdapter;
+    ItemListAdapterAdmin itemListAdapter;
     private View v;
 
-    public FragmentDessert() {
+    public FragmentEntree() {
     }
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_dessert,container,false);
-        recyclerViewEntree = v.findViewById(R.id.recyclerViewDessert);
+        v = inflater.inflate(R.layout.fragment_entree,container,false);
+        recyclerViewEntree = v.findViewById(R.id.recyclerViewEntree);
         Log.d("FragmentEntree", "inside oncreate view: ");
         recyclerViewEntree.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        itemListAdapter = new ItemListAdapterCustomer(listDessert,this.getActivity());
+        itemListAdapter = new ItemListAdapterAdmin(listEntree,this.getActivity());
         recyclerViewEntree.setAdapter(itemListAdapter);
         return v;
     }
@@ -61,7 +62,7 @@ public class FragmentDessert extends Fragment {
     //fetch all the data for menu items from database
     public void fetchItemList(){
         String server_url = "http://everestelectricals.com.au/ceasar/get_menu_items.php";
-        listDessert = new ArrayList<>();
+        listEntree = new ArrayList<>();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, server_url,null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -80,12 +81,12 @@ public class FragmentDessert extends Fragment {
                                 singleItem.setAvailability(jsonObject.getString("availability").trim());
 
                                 //populate the fetched data based on the category
-                                if(singleItem.getCategory().equals("Desserts") && !singleItem.getAvailability().equals("No")){
-                                    listDessert.add(singleItem);
+                                if(singleItem.getCategory().equals("Entree") && !singleItem.getAvailability().equals("No")){
+                                    listEntree.add(singleItem);
                                 }
 
                             }
-                            itemListAdapter.notifyDataSetChanged();
+                         itemListAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -104,4 +105,5 @@ public class FragmentDessert extends Fragment {
 
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
     }
+
 }

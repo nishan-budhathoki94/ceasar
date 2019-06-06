@@ -1,12 +1,11 @@
-package com.mitfinalproject.ceasar.Fragments;
+package com.mitfinalproject.ceasar.Fragments_Customer;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mitfinalproject.ceasar.Customer.ItemListAdapterCustomer;
+import com.mitfinalproject.ceasar.Customer.OnAddToCartListener;
 import com.mitfinalproject.ceasar.ItemData;
 import com.mitfinalproject.ceasar.R;
 import com.mitfinalproject.ceasar.VolleySingleton;
@@ -28,26 +28,25 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentEntree extends Fragment {
-
-    private RecyclerView recyclerViewEntree;
-    private List<ItemData> listEntree;
+public class FragmentPizza extends Fragment {
+    private  List<ItemData> listPizza;
     private ItemData singleItem;
     ItemListAdapterCustomer itemListAdapter;
-    private View v;
+    private OnAddToCartListener mOnAddToCartListener;
+    View v;
 
-    public FragmentEntree() {
+    public FragmentPizza() {
+
     }
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_entree,container,false);
-        recyclerViewEntree = v.findViewById(R.id.recyclerViewEntree);
-        Log.d("FragmentEntree", "inside oncreate view: ");
+        v = inflater.inflate(R.layout.fragment_pizza,container,false);
+        RecyclerView recyclerViewEntree = v.findViewById(R.id.recyclerViewPizza);
+        Log.d("FragmentPizza", "inside oncreate view: "+listPizza.size());
         recyclerViewEntree.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        itemListAdapter = new ItemListAdapterCustomer(listEntree,this.getActivity());
+        itemListAdapter = new ItemListAdapterCustomer(listPizza,this.getActivity());
         recyclerViewEntree.setAdapter(itemListAdapter);
         return v;
     }
@@ -55,15 +54,17 @@ public class FragmentEntree extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         fetchItemList();
-        Log.d("FragmentEntree", "list fetched: ");
+
+        Log.d("FragmentPizza", "list fetched: at last"+listPizza.size());
 
     }
 
     //fetch all the data for menu items from database
     public void fetchItemList(){
         String server_url = "http://everestelectricals.com.au/ceasar/get_menu_items.php";
-        listEntree = new ArrayList<>();
+        listPizza = new ArrayList<>();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, server_url,null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -80,14 +81,15 @@ public class FragmentEntree extends Fragment {
                                 singleItem.setItemID(jsonObject.getInt("itemID"));
                                 singleItem.setPrice(jsonObject.getString("price").trim());
                                 singleItem.setAvailability(jsonObject.getString("availability").trim());
+                                Log.d("FragmentPizza", "list fetched:"+singleItem.getName());
 
                                 //populate the fetched data based on the category
-                                if(singleItem.getCategory().equals("Entree") && !singleItem.getAvailability().equals("No")){
-                                    listEntree.add(singleItem);
+                                if(singleItem.getCategory().equals("Pizza") && !singleItem.getAvailability().equals("No")){
+                                    listPizza.add(singleItem);
                                 }
-
+                                Log.d("FragmentPizza", "pizza list:"+listPizza.size());
                             }
-                         itemListAdapter.notifyDataSetChanged();
+                        itemListAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -105,6 +107,6 @@ public class FragmentEntree extends Fragment {
         };
 
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
-    }
 
+    }
 }
