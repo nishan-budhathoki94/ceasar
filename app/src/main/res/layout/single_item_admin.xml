@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/singleAdminParentLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="4dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp"
-    android:elevation="3dp"
-    android:background="@color/white_background">
+    android:layout_marginTop="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:elevation="8dp">
 
 
     <TextView
@@ -51,7 +51,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textViewSingleItemPrice"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSingleItemSize" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSingleItemSize"
+        app:layout_constraintVertical_bias="0.875" />
 
     <TextView
         android:id="@+id/textViewSingleItemSize"
@@ -64,4 +65,29 @@
         android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@+id/textViewSingleItemName"
         app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textViewEditItemAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textSize="15sp"
+        android:text="@string/edit"
+        android:textColor="@color/blue_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSingleItemPrice" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/price"
+        android:textSize="20sp"
+        android:text="$"
+        app:layout_constraintEnd_toStartOf="@+id/textViewSingleItemPrice"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

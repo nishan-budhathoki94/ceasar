@@ -1,6 +1,7 @@
 package com.mitfinalproject.ceasar;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CurrentDateFormat {
@@ -10,7 +11,8 @@ public class CurrentDateFormat {
 
     public CurrentDateFormat(){
         calendar = Calendar.getInstance();
-        currentDate = java.text.DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy");
+        currentDate = dateFormat.format(calendar.getTime());
     }
 
     public String getCurrentDate(){

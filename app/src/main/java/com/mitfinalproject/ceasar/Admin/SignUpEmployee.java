@@ -1,10 +1,10 @@
-package com.mitfinalproject.ceasar;
+package com.mitfinalproject.ceasar.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -24,6 +24,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mitfinalproject.ceasar.Data.Constants;
+import com.mitfinalproject.ceasar.Login;
+import com.mitfinalproject.ceasar.R;
+import com.mitfinalproject.ceasar.VolleySingleton;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +38,8 @@ public class SignUpEmployee extends AppCompatActivity {
     private String name,phone,email,password;
     ProgressBar progressbar;
     private FirebaseAuth mAuth;
+    private long backPressed;
+    private Toast backToast;
     private String server_url = "http://everestelectricals.com.au/ceasar/signup.php";
 
     @Override
@@ -102,7 +108,7 @@ public class SignUpEmployee extends AppCompatActivity {
                                                 protected Map<String, String> getParams() throws AuthFailureError {
                                                     Map<String, String> params = new HashMap<String, String>();
                                                     params.put("email", email);
-                                                    params.put("type","employee");
+                                                    params.put("type", Constants.TYPE_EMPLOYEE.toLowerCase());
                                                     params.put("phone",phone);
                                                     params.put("name",name);
                                                     return params;
@@ -137,16 +143,32 @@ public class SignUpEmployee extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (backPressed + 2000 > System.currentTimeMillis()){
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        }
+        else {
+            backToast= Toast.makeText(getBaseContext(),"Press back again to exit",Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressed = System.currentTimeMillis();
+    }
+
     //validate email
     public boolean validateEmail() {
         String emailInput = textInputEmail.getEditText().getText().toString().trim();
 
         if(emailInput.isEmpty()) {
             textInputEmail.setError("Email cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
             textInputEmail.setError("Invalid Email Address");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -162,14 +184,17 @@ public class SignUpEmployee extends AppCompatActivity {
 
         if(confirmEmailInput.isEmpty()) {
             textInputConfirmEmail.setError("Email cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(confirmEmailInput).matches()) {
             textInputConfirmEmail.setError("Invalid Email Address");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else if (!emailInput.equals(confirmEmailInput)) {
             textInputConfirmEmail.setError("Email mismatched");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -184,6 +209,7 @@ public class SignUpEmployee extends AppCompatActivity {
 
         if(passwordInput.isEmpty()) {
             textInputPassword.setError("Password cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
 //        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
@@ -202,6 +228,7 @@ public class SignUpEmployee extends AppCompatActivity {
 
         if(phoneInput.isEmpty()) {
             textInputPhone.setError("Phone Field cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -216,6 +243,7 @@ public class SignUpEmployee extends AppCompatActivity {
 
         if(nameInput.isEmpty()) {
             textInputPhone.setError("Name cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -236,20 +264,41 @@ public class SignUpEmployee extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_logout:
                 FirebaseAuth.getInstance().signOut();
+                Intent intentLogout = new Intent(this, Login.class);
+                intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentLogout);
                 finish();
-                startActivity(new Intent(this,Login.class));
                 break;
-            case R.id.viewMenuItems:
+
+            case R.id.set_delivery_zone:
+                Intent intentDeliverZone = new Intent(this, DeliveryZone.class);
+                intentDeliverZone.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentDeliverZone);
                 finish();
-                startActivity(new Intent(this, ItemListAdmin.class));
+                break;
+
+            case R.id.viewMenuItems:
+                Intent intentViewItems = new Intent(this, ItemListAdmin.class);
+                intentViewItems.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentViewItems);
+                finish();
                 break;
             case R.id.action_addMenuItem:
-                startActivity(new Intent(this, AddMenuItemAdmin.class));
+                Intent intent = new Intent(this, AddMenuItemAdmin.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.createEmployeeAccount:
                 Toast.makeText(getApplicationContext(), "You are already in the same menu", Toast.LENGTH_SHORT).show();
                 break;
 
+            case R.id.view_orders:
+                Intent viewOrders = new Intent(this, OrderHistoryAdmin.class);
+                viewOrders.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(viewOrders);
+                finish();
+                break;
         }
         return true;
     }

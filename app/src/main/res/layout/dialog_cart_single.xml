@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:stretchColumns="*"
+    android:divider="@color/colorPrimary"
+    android:id="@+id/single_dialog_cart">
 
-</LinearLayout>
+    <TableRow android:textAlignment="viewStart">
+        <TableLayout>
+            <TableRow>
+                <TextView
+                    android:id="@+id/textViewItemName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </TableRow>
+
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/textViewNumber"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+        <TextView
+            android:id="@+id/textViewCartPrice"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </TableRow>
+
+</TableLayout>

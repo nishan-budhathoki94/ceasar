@@ -6,4 +6,6 @@
     <color name="price">#FF906A</color>
     <color name="description">#6d6060</color>
     <color name="single_item_background">#F9E79F</color>
+    <color name="white_background">#ffffff</color>
+    <color name="blue_button">#197ee3</color>
 </resources>

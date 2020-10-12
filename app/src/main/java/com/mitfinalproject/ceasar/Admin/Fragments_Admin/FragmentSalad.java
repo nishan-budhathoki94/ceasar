@@ -1,4 +1,4 @@
-package com.mitfinalproject.ceasar.Fragments_Admin;
+package com.mitfinalproject.ceasar.Admin.Fragments_Admin;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -16,7 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mitfinalproject.ceasar.Admin.ItemListAdapterAdmin;
-import com.mitfinalproject.ceasar.ItemData;
+import com.mitfinalproject.ceasar.Data.ItemData;
 import com.mitfinalproject.ceasar.R;
 import com.mitfinalproject.ceasar.VolleySingleton;
 
@@ -77,11 +77,11 @@ public class FragmentSalad extends Fragment {
                                 singleItem.setDesc(jsonObject.getString("desc").trim());
                                 singleItem.setSize(jsonObject.getString("size").trim());
                                 singleItem.setItemID(jsonObject.getInt("itemID"));
-                                singleItem.setPrice(jsonObject.getString("price").trim());
+                                singleItem.setPrice(jsonObject.getDouble("price"));
                                 singleItem.setAvailability(jsonObject.getString("availability").trim());
 
                                 //populate the fetched data based on the category
-                                if(singleItem.getCategory().equals("Salads") && !singleItem.getAvailability().equals("No")){
+                                if(singleItem.getCategory().equals("Salads")){
                                     listSalad.add(singleItem);
                                 }
 

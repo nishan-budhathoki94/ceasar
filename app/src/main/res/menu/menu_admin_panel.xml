@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.mitfinalproject.ceasar.AdminPanel">
+    tools:context="com.mitfinalproject.ceasar.Admin.AddMenuItemAdmin">
     <item
         android:id="@+id/action_addMenuItem"
         android:orderInCategory="101"
@@ -14,11 +14,19 @@
     <item
         android:id="@+id/viewMenuItems"
         android:orderInCategory="103"
-        android:title="Menu Items List" />
+        android:title="Menu Items" />
+    <item
+        android:id="@+id/set_delivery_zone"
+        android:orderInCategory="104"
+        android:title="Set DeliveryZone" />
+    <item
+        android:id="@+id/view_orders"
+        android:orderInCategory="105"
+        android:title="View Orders" />
 
     <item
         android:id="@+id/action_logout"
-        android:orderInCategory="104"
+        android:orderInCategory="106"
         android:title="Log Out" />
 
 

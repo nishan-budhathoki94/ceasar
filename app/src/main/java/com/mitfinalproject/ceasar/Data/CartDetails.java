@@ -1,9 +1,7 @@
-package com.mitfinalproject.ceasar.Customer;
+package com.mitfinalproject.ceasar.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.mitfinalproject.ceasar.ItemData;
 
 
 public class CartDetails implements Parcelable {

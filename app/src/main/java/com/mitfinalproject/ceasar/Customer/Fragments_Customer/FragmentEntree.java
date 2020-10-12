@@ -1,4 +1,4 @@
-package com.mitfinalproject.ceasar.Fragments_Customer;
+package com.mitfinalproject.ceasar.Customer.Fragments_Customer;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mitfinalproject.ceasar.Customer.ItemListAdapterCustomer;
 import com.mitfinalproject.ceasar.Customer.OnAddToCartListener;
-import com.mitfinalproject.ceasar.ItemData;
+import com.mitfinalproject.ceasar.Data.ItemData;
 import com.mitfinalproject.ceasar.R;
 import com.mitfinalproject.ceasar.VolleySingleton;
 
@@ -73,13 +73,14 @@ public class FragmentEntree extends Fragment {
                             JSONArray jsonArray = response.getJSONArray("data");
                             for(int i=0;i<jsonArray.length();i++) {
                                 singleItem = new ItemData();
+                                Log.d("FragmentEntree", "onResponse: "+response);
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 singleItem.setName(jsonObject.getString("name").trim());
                                 singleItem.setCategory(jsonObject.getString("category").trim());
                                 singleItem.setDesc(jsonObject.getString("desc").trim());
                                 singleItem.setSize(jsonObject.getString("size").trim());
                                 singleItem.setItemID(jsonObject.getInt("itemID"));
-                                singleItem.setPrice(jsonObject.getString("price").trim());
+                                singleItem.setPrice(jsonObject.getDouble("price"));
                                 singleItem.setAvailability(jsonObject.getString("availability").trim());
 
                                 //populate the fetched data based on the category
@@ -104,8 +105,6 @@ public class FragmentEntree extends Fragment {
                 }) {
 
         };
-
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
     }
-
 }

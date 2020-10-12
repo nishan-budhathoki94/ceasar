@@ -22,6 +22,11 @@
     <string name="in_stock">In Stock</string>
     <string name="price">Price</string>
     <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="view_cart">View Cart</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="note_hint">Add Note.....(Optional)</string>
+    <string name="no_internet">Sorry!! No internet connection</string>
     <string-array name="categories">
         <item name="entry">Entree</item>
         <item name="pizza">Pizza</item>
@@ -129,7 +134,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_delivery_zone">Set Delivery Zone</string>
 
 </resources>

@@ -1,6 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/orderLayoutCustomer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="5dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Order ID:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderIDCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Address:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderAddressCustomer"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+        </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Price:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderPriceCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Total Items:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderTotalCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Date:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderDateCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Status:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderStatusCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:visibility="gone"
+                android:id="@+id/rowCustomerName">
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Customer:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:visibility="gone"
+                android:id="@+id/rowCustomerPhone">
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Phone:" />
+
+                <TextView
+                    android:id="@+id/textViewOrderCustomerPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="OrderID" />
+
+            </TableRow>
+
+
+
+
+        </TableLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

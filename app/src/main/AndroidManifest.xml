@@ -12,18 +12,47 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ItemList"></activity>
-        <activity android:name=".ForgotPassword" />
-        <activity android:name=".CustomerPanel" />
-        <activity android:name=".AdminPanel" />
-        <activity android:name=".SignUp" />
+        <activity android:name=".Admin.OrderHistoryAdmin"></activity>
+        <activity android:name=".SingleOrderExpanded" />
+        <activity android:name=".Customer.OrderHistory" />
+        <activity android:name=".Customer.ActiveOrder" />
+        <activity android:name=".Customer.Checkout" />
         <activity
-            android:name=".Login"
-            android:label="@string/btn_login">
+            android:name=".Admin.DeliveryZone"
+            android:label="@string/title_activity_delivery_zone" />
+        <activity
+            android:name=".Admin.EditMenuItemAdmin"
+            android:label="Edit Menu Item" />
+        <activity
+            android:name=".Admin.ItemListAdmin"
+            android:label="Menu Items" />
+        <activity android:name=".ForgotPassword" />
+        <activity
+            android:name=".Customer.ItemListCustomer"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Admin.AddMenuItemAdmin" />
+        <activity android:name=".SignUp" />
+        <activity android:name=".Admin.SignUpEmployee" />
+        <activity android:name=".Login" />
+        <activity android:name=".Employee.ActiveOrdersEmployee" />
+        <activity android:name=".Employee.SingleOrderExpandedEmployee" />
+        <activity android:name=".Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="com.mitfinalproject.ceasar.braintree" />
             </intent-filter>
         </activity>
     </application>

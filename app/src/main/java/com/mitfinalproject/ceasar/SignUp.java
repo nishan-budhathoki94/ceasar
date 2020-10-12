@@ -2,9 +2,9 @@ package com.mitfinalproject.ceasar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mitfinalproject.ceasar.Data.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class SignUp extends AppCompatActivity {
 
     private TextInputLayout textInputEmail,textInputPassword,textInputConfirmEmail,textInputPhone,textInputName;
-    private String name,phone,email,password,type;
+    private String name,phone,email,password;
     ProgressBar progressbar;
     private FirebaseAuth mAuth;
     private String server_url = "http://everestelectricals.com.au/ceasar/signup.php";
@@ -55,7 +56,6 @@ public class SignUp extends AppCompatActivity {
             email = textInputEmail.getEditText().getText().toString().trim();
             password = textInputPassword.getEditText().getText().toString().trim();
             phone = textInputPhone.getEditText().getText().toString().trim();
-            type = "customer";
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -77,7 +77,6 @@ public class SignUp extends AppCompatActivity {
                                                             progressbar.setVisibility(View.GONE);
                                                             finish();
                                                             startActivity(loginActivity);
-
                                                         }
                                                     },
 
@@ -87,7 +86,6 @@ public class SignUp extends AppCompatActivity {
                                                             progressbar.setVisibility(View.INVISIBLE);
                                                             Toast.makeText(getApplicationContext(), "Error..."+error.toString(), Toast.LENGTH_SHORT).show();
                                                             error.printStackTrace();
-
                                                         }
                                                     }) {
 
@@ -95,7 +93,7 @@ public class SignUp extends AppCompatActivity {
                                                 protected Map<String, String> getParams() throws AuthFailureError {
                                                     Map<String, String> params = new HashMap<String, String>();
                                                     params.put("email", email);
-                                                    params.put("type",type);
+                                                    params.put("type", Constants.TYPE_CUSTOMER.toLowerCase());
                                                     params.put("phone",phone);
                                                     params.put("name",name);
                                                     return params;
@@ -117,14 +115,13 @@ public class SignUp extends AppCompatActivity {
                                 Log.w("Firebase", "createUserWithEmail:failure", task.getException());
                                 Toast.makeText(SignUp.this, "Email "+email+" is already registered.",
                                         Toast.LENGTH_LONG).show();
+                                progressbar.setVisibility(View.INVISIBLE);
                                 textInputName.getEditText().setText("");
                                 textInputEmail.getEditText().setText("");
                                 textInputConfirmEmail.getEditText().setText("");
                                 textInputPassword.getEditText().setText("");
                                 textInputPhone.getEditText().setText("");
                             }
-
-                            // ...
                         }
                     });
 
@@ -138,10 +135,12 @@ public class SignUp extends AppCompatActivity {
 
         if(emailInput.isEmpty()) {
             textInputEmail.setError("Email cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
             textInputEmail.setError("Invalid Email Address");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -157,14 +156,17 @@ public class SignUp extends AppCompatActivity {
 
         if(confirmEmailInput.isEmpty()) {
             textInputConfirmEmail.setError("Email cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(confirmEmailInput).matches()) {
             textInputConfirmEmail.setError("Invalid Email Address");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else if (!emailInput.equals(confirmEmailInput)) {
             textInputConfirmEmail.setError("Email mismatched");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -179,6 +181,7 @@ public class SignUp extends AppCompatActivity {
 
         if(passwordInput.isEmpty()) {
             textInputPassword.setError("Password cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
 //        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
@@ -197,6 +200,7 @@ public class SignUp extends AppCompatActivity {
 
         if(phoneInput.isEmpty()) {
             textInputPhone.setError("Phone Field cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {
@@ -211,6 +215,7 @@ public class SignUp extends AppCompatActivity {
 
         if(nameInput.isEmpty()) {
             textInputPhone.setError("Name cannot be empty");
+            progressbar.setVisibility(View.INVISIBLE);
             return false;
         }
         else {

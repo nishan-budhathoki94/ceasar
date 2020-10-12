@@ -3,23 +3,23 @@ package com.mitfinalproject.ceasar.Admin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mitfinalproject.ceasar.ItemData;
+import com.mitfinalproject.ceasar.Data.ItemData;
 import com.mitfinalproject.ceasar.R;
 
 import java.util.List;
 
-public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemListViewHolder> {
+public class ItemListAdapterAdmin extends RecyclerView.Adapter<ItemListAdapterAdmin.ItemListViewHolder> {
     private List<ItemData> data;
     private Context mContext;
 
-    public ItemListAdapter(List<ItemData> data, Context context) {
+    public ItemListAdapterAdmin(List<ItemData> data, Context context) {
         this.data = data;
         mContext = context;
     }
@@ -36,7 +36,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemLi
         final ItemData itemData = data.get(i);
         itemListViewHolder.name.setText(itemData.getName());
         itemListViewHolder.desc.setText(itemData.getDesc());
-        itemListViewHolder.price.setText("$"+itemData.getPrice());
+        itemListViewHolder.price.setText(String.valueOf(itemData.getPrice()));
 
         //hide the textview for size if its not applicable
         if(itemData.getSize().equals("None")){

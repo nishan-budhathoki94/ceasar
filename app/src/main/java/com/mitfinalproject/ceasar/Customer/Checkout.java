@@ -1,14 +1,18 @@
-package com.mitfinalproject.ceasar;
+package com.mitfinalproject.ceasar.Customer;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,28 +30,78 @@ import com.braintreepayments.api.dropin.DropInResult;
 import com.braintreepayments.api.interfaces.HttpResponseCallback;
 import com.braintreepayments.api.internal.HttpClient;
 import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.mitfinalproject.ceasar.CurrentDateFormat;
+import com.mitfinalproject.ceasar.Data.CartDetails;
+import com.mitfinalproject.ceasar.Data.Constants;
+import com.mitfinalproject.ceasar.Data.OrderData;
+import com.mitfinalproject.ceasar.Login;
+import com.mitfinalproject.ceasar.R;
+import com.mitfinalproject.ceasar.VolleySingleton;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Checkout extends AppCompatActivity {
 
 
     private static final int REQUEST_CODE = 1234;
-    String API_GET_TOKEN="http://everestelectricals.com.au/ceasar/braintree/main.php";
-    String API_CheckOUT="http://everestelectricals.com.au/ceasar/braintree/checkout";
+    private String API_GET_TOKEN="http://everestelectricals.com.au/ceasar/braintree/get_token.php";
+    private String API_CheckOUT="http://everestelectricals.com.au/ceasar/braintree/checkout.php";
+    private String token,date,server_url = "http://everestelectricals.com.au/ceasar/set_order.php";
+    private double amount;
+    private int total_items;
+    private List<CartDetails> cartDetails = new ArrayList<>();
+    private HashMap<String,String> paramsHash;
+    private Button btn_pay;
+    private TextView price,numberOfItems,address;
+    private EditText deliveyNote;
+    private FirebaseUser mUser;
+    private FirebaseAuth mAuth;
+    private CurrentDateFormat currentDate = new CurrentDateFormat();
+    private ProgressBar progressBar;
+    private String jSon;
+    private List<OrderData> orderDataList;
 
-    String token,amount;
-    HashMap<String,String> paramsHash;
-    Button btn_pay;
-    EditText edit_amount;
-    LinearLayout group_payment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
-        edit_amount = findViewById(R.id.editText);
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        price = findViewById(R.id.textViewCheckOutPrice);
+        numberOfItems = findViewById(R.id.textViewCheckoutItems);
+        address = findViewById(R.id.textViewCheckOutAddress);
+        btn_pay = findViewById(R.id.buttonPay);
+        deliveyNote = findViewById(R.id.editTextCheckOutDeliverNote);
+        progressBar = findViewById(R.id.progressBarPayment);
+
+        if (getIntent().getParcelableArrayListExtra("cart_details") != null) {
+            cartDetails = getIntent().getParcelableArrayListExtra("cart_details");
+            orderDataList = new ArrayList<>();
+            //loop through each element of the cart
+            for (int i =0;i<cartDetails.size();i++){
+                orderDataList.add(new OrderData(cartDetails.get(i).getItemData().getItemID(),
+                        cartDetails.get(i).getItemData().getName(),
+                        cartDetails.get(i).getPrice(),cartDetails.get(i).getNumber()));
+                total_items += cartDetails.get(i).getNumber();
+                amount += cartDetails.get(i).getPrice();
+            }
+            //converting to json string to inject into database
+            Gson gson = new Gson();
+            jSon = gson.toJson(orderDataList);
+        }
+
+        address.setText(getIntent().getStringExtra("address"));
+        numberOfItems.setText(String.valueOf(total_items));
+        price.setText("$" +amount);
+
 
         new getToken().execute();
 
@@ -61,14 +115,13 @@ public class Checkout extends AppCompatActivity {
     }
 
     private void submitPayment(){
-        String payValue=edit_amount.getText().toString();
-        if(!payValue.isEmpty())
+        if(amount>0)
         {
             DropInRequest dropInRequest=new DropInRequest().clientToken(token);
             startActivityForResult(dropInRequest.getIntent(this),REQUEST_CODE);
         }
         else
-            Toast.makeText(this, "Enter a valid amount for payment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Amount is not valid", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -78,7 +131,7 @@ public class Checkout extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if(response.contains("Successful")){
-                            Toast.makeText(Checkout.this, "Payment Success", Toast.LENGTH_SHORT).show();
+                            injectIntoDB();
                         }
                         else {
                             Toast.makeText(Checkout.this, "Payment Failed", Toast.LENGTH_SHORT).show();
@@ -128,8 +181,7 @@ public class Checkout extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            group_payment.setVisibility(View.VISIBLE);
-                            token=responseBody;
+                            token = responseBody;
                         }
                     });
                 }
@@ -162,25 +214,19 @@ public class Checkout extends AppCompatActivity {
         if(requestCode== REQUEST_CODE){
             if(resultCode==RESULT_OK)
             {
+                progressBar.setVisibility(View.VISIBLE);
                 DropInResult result=data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
                 PaymentMethodNonce nonce= result.getPaymentMethodNonce();
-                String strNounce=nonce.getNonce();
-                if(!edit_amount.getText().toString().isEmpty())
-                {
-                    amount=edit_amount.getText().toString();
+                String strNounce = nonce.getNonce();
                     paramsHash=new HashMap<>();
-                    paramsHash.put("amount",amount);
+                    paramsHash.put("amount",String.valueOf(amount));
                     paramsHash.put("nonce",strNounce);
-
                     sendPayments();
-                }
-                else {
-                    Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show();
-                }
+
             }
             else if(resultCode==RESULT_CANCELED)
             {
-                Toast.makeText(this, "User canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "User cancelled", Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -188,6 +234,91 @@ public class Checkout extends AppCompatActivity {
                 Log.d("Err",error.toString());
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_customer,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                FirebaseAuth.getInstance().signOut();
+                Intent intentLogout = new Intent(this, Login.class);
+                intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentLogout);
+                finish();
+                break;
+
+           case R.id.action_view_menu:
+               Intent intentMenu = new Intent(Checkout.this, ItemListCustomer.class);
+               intentMenu.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               startActivity(intentMenu);
+               finish();
+                break;
+           case R.id.action_order_history:
+                Intent intentHistory = new Intent(Checkout.this, OrderHistory.class);
+                intentHistory.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHistory);
+                finish();
+                break;
+            case R.id.action_active_orders:
+                Intent intentActive = new Intent(Checkout.this, ActiveOrder.class);
+                intentActive.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentActive);
+                finish();
+                break;
+        }
+        return true;
+    }
+
+    public void injectIntoDB(){
+        StringRequest request = new StringRequest(Request.Method.POST, server_url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(Checkout.this, "Payment Success. "+response, Toast.LENGTH_LONG).show();
+                        Log.d("JsonParsing", "onResponse: "+jSon);
+                        progressBar.setVisibility(View.GONE);
+
+                        //start new activity
+                        Intent activeOrder = new Intent(Checkout.this,ActiveOrder.class);
+                        activeOrder.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(activeOrder);
+                        finish();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Error..."+error.toString(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", mUser.getEmail());
+                params.put("address",address.getText().toString());
+                params.put("note",deliveyNote.getText().toString());
+                params.put("status", Constants.STATUS_RECEIVED.toLowerCase());
+                params.put("price",String.valueOf(amount));
+                params.put("date", currentDate.getCurrentDate());
+                params.put("total",String.valueOf(total_items));
+                params.put("items",jSon);
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(Checkout.this).addToRequestQueue(request);
     }
 
 }

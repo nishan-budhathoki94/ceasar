@@ -1,4 +1,4 @@
-package com.mitfinalproject.ceasar;
+package com.mitfinalproject.ceasar.Data;
 
 public interface Constants {
     public final String STATUS_RECEIVED = "RECEIVED";

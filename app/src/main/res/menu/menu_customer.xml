@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/action_active_orders"
+        android:orderInCategory="101"
+        android:title="Active Orders" />
+    <item
+        android:id="@+id/action_view_menu"
+        android:orderInCategory="102"
+        android:title="View Menu" />
+    <item
+        android:id="@+id/action_order_history"
+        android:orderInCategory="103"
+        android:title="Order History" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="104"
+        android:title="Log Out" />
+
 </menu>
